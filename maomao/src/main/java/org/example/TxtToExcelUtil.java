@@ -191,12 +191,14 @@ public class TxtToExcelUtil {
         System.out.println("  ");
         System.out.println(">>   扫描歌词txt文件并复制到txt目录   <<");
         System.out.println("  ");
+
         System.out.println("请输入要扫描的目录（复制路径，使用鼠标右键可以黏贴，会自动扫描所有目录噢，回车确认）");
         String scanning = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
         try{
             File file = new File(scanning);
             if(file.exists()){
+                FunctionView.existsAndMkdir(new File(FunctionView.getPath() + "\\" + "歌词文本" + "\\"));
                 if(file.isDirectory()){
                     sacnTxtFile(file);
 

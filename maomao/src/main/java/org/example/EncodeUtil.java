@@ -18,7 +18,7 @@ public class EncodeUtil {
 
     private static int BYTE_SIZE = 8;
     public static String CODE_UTF8 = "UTF-8";
-    public static String CODE_UTF8_BOM = "UTF-8_BOM";
+    public static String CODE_UTF8_BOM = "UTF-8";
     public static String CODE_GBK = "GBK";
 
     /**
