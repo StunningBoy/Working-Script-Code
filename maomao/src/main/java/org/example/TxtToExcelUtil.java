@@ -157,7 +157,7 @@ public class TxtToExcelUtil {
                                         isZC = true ;
                                     }
                                 }
-                                if(t[i].indexOf("曲") >= 0){
+                                if(t[i].indexOf("曲") >= 0 && t[i].indexOf("编曲") < 0){
                                     if(!isZQ){
                                         writeMusic = line.substring(tIndex + t[i].length() + 1);
                                     }

@@ -78,13 +78,14 @@ public class FunctionView {
         System.out.println("                                                                       ");
         System.out.println("功能3（创建专辑文件夹）：");
         System.out.println("    1）运行脚本选择功能3 ;");
+        System.out.println("    1）输入要生成的路径 ;");
         System.out.println("    2）输入歌手名和歌曲名 ;");
-        System.out.println("    3）生成的文件夹在\"专辑\"目录下。");
         System.out.println("                                                                       ");
         System.out.println("功能4（自动分类专辑文件）：");
         System.out.println("    1）把需要分类的文件复制到对应的专辑目录下 ;");
-        System.out.println("    2）运行脚本选择功能4，程序会自动扫描专辑目录内的所有“EP资料”目录，然后自动分类专辑文件 ;");
-        System.out.println("    3）自动分类后，要记得检查一下哦。");
+        System.out.println("    2）输入要扫描的目录，程序会自动扫描输入目录内的所有带“EP资料”关键字文件夹;");
+        System.out.println("    3）运行脚本选择功能4，程序会自动扫描输入目录内的所有“EP资料”目录，然后自动分类专辑文件 ;");
+        System.out.println("    4）自动分类后，要记得检查一下哦。");
         System.out.println("                                                                       ");
         System.out.println("功能5（扫描歌词txt文件并复制到txt目录）：");
         System.out.println("    1）运行脚本选择功能5 ;");

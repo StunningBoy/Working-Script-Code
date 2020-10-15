@@ -1,6 +1,5 @@
 package org.example;
 
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
@@ -15,14 +14,19 @@ public class AlbumUtil {
         System.out.println(">>   创建专辑目录   <<");
         System.out.println("  ");
         String path = FunctionView.getPath();
-        String directroyPath = path + "\\" + "专辑" + "\\" ;
-        File directroy = new File(directroyPath);
+        System.out.println("Can you tell me: 你想将专辑文件夹创建到哪里？");
+        String zjmulu = new BufferedReader(new InputStreamReader(System.in)).readLine();
+        File directroy = new File(zjmulu);
+        if(!directroy.isDirectory()){
+            System.out.println("你是猪吗？输入路径不是一个目录路径");
+            return ;
+        }
         FunctionView.existsAndMkdir(directroy);
         System.out.println("请输入歌手名称（回车确认）：");
         String geshou = new BufferedReader(new InputStreamReader(System.in)).readLine();
         System.out.println("请输入歌曲名称（回车确认）：");
         String gequ = new BufferedReader(new InputStreamReader(System.in)).readLine();
-        String mulu = directroyPath + geshou + "-" +gequ + "-EP资料\\" ;
+        String mulu = zjmulu + "\\" + geshou + "-" +gequ + "-EP资料\\" ;
         String directroyQz = mulu + geshou + "-" +gequ + "-" ;
         String directroy1 = directroyQz + "歌曲&歌词" ;
         String directroy2 = directroyQz + "歌手写真" ;
@@ -30,30 +34,51 @@ public class AlbumUtil {
         FunctionView.existsAndMkdir(new File(directroy1));
         FunctionView.existsAndMkdir(new File(directroy2));
         FunctionView.existsAndMkdir(new File(directroy3));
-        System.out.print("专辑目录已经生成，速去\"专辑\"目录中查看!  （按回车返回功能列表）");
+        System.out.print("专辑目录已经生成，速去\""+zjmulu+"\"目录中查看!  （按回车返回功能列表）");
     }
 
     public static void autoGroup() throws Exception {
         System.out.println("  ");
         System.out.println(">>   扫描相关专辑文件并复制到对应的目录中   <<");
         System.out.println("  ");
-//        System.out.println("请输入要扫描的目录（复制路径，使用鼠标右键可以黏贴，会自动扫描所有目录噢，回车确认）");
-//        String scanning = new BufferedReader(new InputStreamReader(System.in)).readLine();
+        System.out.println("请输入要扫描的目录（复制路径，使用鼠标右键可以黏贴，会自动扫描所有目录噢，回车确认）");
+        String scanning = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
+        File directroy = new File(scanning);
+        if(!directroy.isDirectory()){
+            System.out.println("你是猪吗？输入路径不是一个目录路径");
+            return ;
+        }
         System.out.println("正在分类...");
-        String directroyPath = FunctionView.getPath() + "\\" + "专辑" + "\\" ;
-        File directroy = new File(directroyPath);
-        for (String epDirName: directroy.list()) {
-            if(epDirName.indexOf("EP资料") >= 0){
-                sacnZjFile(new File(directroyPath + epDirName), true);
+        try{
+            sacnZjDirectory(directroy);
+            System.out.print("自动分类完成，速去\""+scanning+"\"目录下检查!  （按回车返回功能列表）");
+        }catch (Exception e){
+            System.out.println("分类出错：" + e.getMessage());
+        }
+    }
+
+    public static void sacnZjDirectory(File directory) throws Exception{
+        String path = directory.getPath();
+        String[] fileNames = directory.list();
+        for (String fileName: fileNames) {
+            File file = new File(path + "\\" + fileName) ;
+            if(file.isDirectory()){
+                if(fileName.indexOf("EP资料") >= 0){
+                    sacnZjFile(new File(path + "\\" + fileName), true);
+                }else{
+                    sacnZjFile(new File(path + "\\" + fileName), false);
+                }
             }
         }
-        System.out.print("自动分类完成，速去\"专辑\"目录中查看!  （按回车返回功能列表）");
     }
 
     public static void sacnZjFile(File directory, boolean ifEP) throws Exception{
         String path = directory.getPath();
         String[] fileNames = directory.list();
+        if(fileNames == null){
+            return ;
+        }
         if(ifEP){
             String geshou = directory.getName().split("-")[0] ;
             String gequ = directory.getName().split("-")[1] ;
@@ -61,7 +86,7 @@ public class AlbumUtil {
             String[] muiscTypeArr = {".mpeg", ".mp3", ".mpeg-4", ".map4", ".midi", ".wma", ".vqf", ".amr", ".wav"} ;
             List<String> photoTypeList = Arrays.asList(photoTypeArr);
             List<String> muiscTypeList = Arrays.asList(muiscTypeArr);
-            String directroyPath = FunctionView.getPath() + "\\" + "专辑" + "\\" + geshou + "-" + gequ + "-EP资料\\" + geshou + "-" + gequ + "-" ;
+            String directroyPath = path + "\\" + geshou + "-" + gequ + "-" ;
             for (String fileName: fileNames) {
                 try{
                     File file = new File(directory.getPath() + "\\" + fileName) ;
@@ -86,18 +111,7 @@ public class AlbumUtil {
                 }
             }
         }else{
-            for (String fileName: fileNames) {
-                File file = new File(path + "\\" + fileName) ;
-                if(file.isDirectory()){
-                    if(fileName.indexOf("EP资料") >= 0){
-                        sacnZjFile(file, true);
-                    }else{
-                        sacnZjFile(file, false);
-                    }
-                }else if(file.isFile()){
-
-                }
-            }
+            sacnZjDirectory(directory);
         }
 
     }
@@ -383,8 +397,8 @@ public class AlbumUtil {
             musicMap.put("time", time) ;
             musicMap.put("gongsi", gongsi) ;
             musicMap.put("type", type) ;
-            musicMap.put("jieshao", "=clean("+jieshao.toString()+")") ;
-            musicMap.put("qumu", "=clean("+qumu.toString()+")") ;
+            musicMap.put("jieshao", jieshao.toString() ) ;
+            musicMap.put("qumu", qumu.toString() ) ;
             return musicMap ;
         }catch (Exception e){
             System.out.println("读取文件<" + fileName + ">出错：" + e.getMessage());
